@@ -9,47 +9,47 @@ type NewEntityResources struct {
 	NewEntityService NewEntityService
 }
 
-func (rs NewEntityResources) Routes(s *fuego.Server) {
+func (resource NewEntityResources) Routes(s *fuego.Server) {
 	newEntityGroup := fuego.Group(s, "/newEntity")
 
-	fuego.Get(newEntityGroup, "/", rs.getAllNewEntity)
-	fuego.Post(newEntityGroup, "/", rs.postNewEntity)
+	fuego.Get(newEntityGroup, "/", resource.getAllNewEntity)
+	fuego.Post(newEntityGroup, "/", resource.postNewEntity)
 
-	fuego.Get(newEntityGroup, "/{id}", rs.getNewEntity)
-	fuego.Put(newEntityGroup, "/{id}", rs.putNewEntity)
-	fuego.Delete(newEntityGroup, "/{id}", rs.deleteNewEntity)
+	fuego.Get(newEntityGroup, "/{id}", resource.getNewEntity)
+	fuego.Put(newEntityGroup, "/{id}", resource.putNewEntity)
+	fuego.Delete(newEntityGroup, "/{id}", resource.deleteNewEntity)
 }
 
-func (rs NewEntityResources) getAllNewEntity(c fuego.ContextNoBody) ([]NewEntity, error) {
-	return rs.NewEntityService.GetAllNewEntity()
+func (resource NewEntityResources) getAllNewEntity(c fuego.ContextNoBody) ([]*NewEntity, error) {
+	return resource.NewEntityService.GetAllNewEntity()
 }
 
-func (rs NewEntityResources) postNewEntity(c fuego.ContextWithBody[NewEntityCreate]) (NewEntity, error) {
+func (resource NewEntityResources) postNewEntity(c fuego.ContextWithBody[*NewEntity]) (*NewEntity, error) {
 	body, err := c.Body()
 	if err != nil {
-		return NewEntity{}, err
+		return nil, err
 	}
 
-	return rs.NewEntityService.CreateNewEntity(body)
+	return resource.NewEntityService.CreateNewEntity(body)
 }
 
-func (rs NewEntityResources) getNewEntity(c fuego.ContextNoBody) (NewEntity, error) {
+func (resource NewEntityResources) getNewEntity(c fuego.ContextNoBody) (*NewEntity, error) {
 	id := c.PathParam("id")
 
-	return rs.NewEntityService.GetNewEntity(id)
+	return resource.NewEntityService.GetNewEntity(id)
 }
 
-func (rs NewEntityResources) putNewEntity(c fuego.ContextWithBody[NewEntityUpdate]) (NewEntity, error) {
+func (resource NewEntityResources) putNewEntity(c fuego.ContextWithBody[*NewEntity]) (*NewEntity, error) {
 	id := c.PathParam("id")
 
 	body, err := c.Body()
 	if err != nil {
-		return NewEntity{}, err
+		return nil, err
 	}
 
-	return rs.NewEntityService.UpdateNewEntity(id, body)
+	return resource.NewEntityService.UpdateNewEntity(id, body)
 }
 
-func (rs NewEntityResources) deleteNewEntity(c fuego.ContextNoBody) (any, error) {
-	return rs.NewEntityService.DeleteNewEntity(c.PathParam("id"))
+func (resource NewEntityResources) deleteNewEntity(c fuego.ContextNoBody) (any, error) {
+	return resource.NewEntityService.DeleteNewEntity(c.PathParam("id"))
 }
