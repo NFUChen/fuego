@@ -1,4 +1,5 @@
-module github.com/go-fuego/fuego/cmd/fuego
+module  github.com/NFUChen/fuego/cmd/fuego
+
 
 go 1.23.3
 
